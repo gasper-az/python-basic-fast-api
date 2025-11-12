@@ -1,7 +1,7 @@
 steps:
   - label: "Custom checkout"
     command: "buildkite-agent pipeline upload"
-    key: checkout
+    key: checkout_repo
     plugins:
       - custom-checkout#v1.6.0:
           skip_checkout: true
@@ -12,7 +12,7 @@ steps:
   - label: ':docker: Build Docker image'
     command: 'docker build -t fastapi-docker .'
     key: build_image
-    depends_on: checkout
+    depends_on: checkout_repo
     agents:
       queue: kv-queue-poc-aks-buildkite-123
   - label: ':docker: Docker image list'
