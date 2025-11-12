@@ -1,23 +1,6 @@
 steps:
-  - label: "Custom checkout"
-    command: "buildkite-agent pipeline upload"
-    key: checkout_repo
-    plugins:
-      - custom-checkout#v1.6.0:
-          skip_checkout: true
-          repos:
-            - url: "https://github.com/gasper-az/python-basic-fast-api.git"
-    agents:
-      queue: kv-queue-poc-aks-buildkite-123
-  - label: ':docker: Build Docker image'
-    command: 'docker build -t fastapi-docker .'
-    key: build_image
-    depends_on: checkout_repo
-    agents:
-      queue: kv-queue-poc-aks-buildkite-123
-  - label: ':docker: Docker image list'
-    command: 'docker images -a'
-    depends_on: build_image
-    key: image_list
+  - label: "Hello World!"
+    command: echo "Hello World!"
+    key: greets
     agents:
       queue: kv-queue-poc-aks-buildkite-123
