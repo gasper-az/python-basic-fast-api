@@ -1,15 +1,23 @@
 steps:
-  - label: ":construction_worker: Build"
-    command: echo "Build the rocket"
-    key: build
-
-  - label: ":white_check_mark: Test"
-    command: echo "Test the rocket"
-    key: test
-    depends_on: build
-
-  - label: ":rocket: Deploy"
-    command: |
-      echo "Launch the rocket"
-    key: deploy
-    depends_on: test
+  - label: "Custom checkout"
+    command: "buildkite-agent pipeline upload"
+    key: checkout
+    plugins:
+      - custom-checkout#v1.6.0:
+          skip_checkout: true
+          repos:
+            - url: "https://github.com/gasper-az/python-basic-fast-api.git"
+    agents:
+      queue: kv-queue-poc-aks-buildkite-123
+  - label: ':docker: Build Docker image'
+    command: 'docker build -t fastapi-docker .'
+    key: build_image
+    depends_on: checkout
+    agents:
+      queue: kv-queue-poc-aks-buildkite-123
+  - label: ':docker: Docker image list'
+    command: 'docker images -a'
+    depends_on: build_image
+    key: image_list
+    agents:
+      queue: kv-queue-poc-aks-buildkite-123
